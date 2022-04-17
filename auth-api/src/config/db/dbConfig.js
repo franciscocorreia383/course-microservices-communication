@@ -20,7 +20,7 @@ sequelize
 })
 .catch((err) => {
     console.error("Unable to connect to the database");
-    console.error(err.messege);
+    console.error(err.message);
 })
 
 export default sequelize;

@@ -6,7 +6,7 @@ class UserRepository {
         try {
             return await User.findOne({ where: { id } })
         } catch (error) {
-            console.error(error.messege);
+            console.error(error.message);
             return null;
         }
     }
@@ -15,7 +15,7 @@ class UserRepository {
         try {
             return await User.findOne({ where: { email } })
         } catch (error) {
-            console.error(error.messege);
+            console.error(error.message);
             return null;
         }
     }

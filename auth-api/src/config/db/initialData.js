@@ -14,6 +14,6 @@ export async function CreateInitialData() {
             password: password
         });
     } catch (error) {
-        console.log(error.messege);
+        console.log(error.message);
     }
 }
