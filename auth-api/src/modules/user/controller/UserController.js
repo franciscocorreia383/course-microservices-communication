@@ -2,6 +2,12 @@ import UserService from "../service/UserService";
 
 
 class UserController{
+
+    async getAcessToken(req, res){
+        let accessToken = await UserService.getAcessToken(req);
+        return res.status(accessToken.status).json(accessToken);
+    }
+
     async findByEmail(req, res){
 
         let user = await UserService.findByEmail(req);
