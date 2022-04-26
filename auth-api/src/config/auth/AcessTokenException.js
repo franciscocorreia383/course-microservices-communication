@@ -1,4 +1,4 @@
-class UserException extends Error {
+class AuthException extends Error {
 
     constructor(status, message){
         super(message);
@@ -11,4 +11,4 @@ class UserException extends Error {
 
 }
 
-export default UserException
+export default AuthException;
