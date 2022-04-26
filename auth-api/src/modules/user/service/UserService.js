@@ -10,9 +10,11 @@ class UserService {
     async findByEmail(req) {
         try {
             const email = req.params.email;
+            const { authUser } = req;
             this.validatenRequiredData(email);
             let user = await UserRepository.findByEmail(email);
             this.validateUserNotFound(user);
+            this.validateAuthenticatedUser(user, authUser);
 
             return {
                 status: httpStatus.SUCCESS,
@@ -26,7 +28,7 @@ class UserService {
         } catch (error) {
             return {
                 status: error.status ? error.status : httpStatus.INTERNAL_SERVER_ERROR,
-                message: error.status
+                message: error.message
             }
         }
     }
@@ -43,6 +45,12 @@ class UserService {
         }
     }
 
+    validateAuthenticatedUser(user, authUser) {
+        if (!authUser || (user.id !== authUser.id)) {
+            throw new UserException(httpStatus.FORBIDDEN, "You Cannot see this user data.");
+        }
+    }
+
     async getAcessToken(req) {
         try {
             const { email, password } = req.body;
@@ -55,8 +63,8 @@ class UserService {
                 name: user.name,
                 email: user.email
             };
-            const accessToken = jwt.sign({authUser}, secrets.API_SECRETS ,{expiresIn: '1d'});
-            return{
+            const accessToken = jwt.sign({ authUser }, secrets.API_SECRETS, { expiresIn: '1d' });
+            return {
                 status: httpStatus.SUCCESS,
                 accessToken,
             }
@@ -76,7 +84,7 @@ class UserService {
         }
     }
 
-    async validatePassword(password, hashPassword){
+    async validatePassword(password, hashPassword) {
         if (!await bcrypt.compare(password, hashPassword)) {
             throw new UserException(httpStatus.UNAUTHORAZED, "Password doesn't match.");
         }
